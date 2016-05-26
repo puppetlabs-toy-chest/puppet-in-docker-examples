@@ -7,6 +7,10 @@ Vagrant.configure(2) do |config|
   config.vm.box = "centos/atomic-host"
   # config.vm.synced_folder "../data", "/vagrant_data"
 
+  # If you would like to experiment with Cockpit then
+  # it may be useful to forward the relevant port
+  # config.vm.network "forwarded_port", guest: 9090, host: 9090
+
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
   end
