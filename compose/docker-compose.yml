@@ -1,0 +1,38 @@
+version: '2'
+
+services:
+  puppet:
+    container_name: puppet
+    hostname: puppet
+    image: puppet/puppetserver
+    ports:
+      - 8140
+    volumes:
+      - ./code:/etc/puppetlabs/code/
+
+  puppetdbpostgres:
+    container_name: postgres
+    image: puppet/puppetdb-postgres
+    environment:
+      - POSTGRES_PASSWORD=puppetdb
+      - POSTGRES_USER=puppetdb
+    expose:
+      - 5432
+
+  puppetdb:
+    hostname: puppetdb
+    image: puppet/puppetdb
+    ports:
+      - 8080
+      - 8081
+
+  puppetboard:
+    image: puppet/puppetboard
+    ports:
+      - 8000
+
+  puppetexplorer:
+    image: puppet/puppetexplorer
+    ports:
+      - 80
+    read_only: true

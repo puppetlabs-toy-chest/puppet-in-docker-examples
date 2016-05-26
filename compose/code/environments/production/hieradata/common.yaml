@@ -1,0 +1,15 @@
+puppet_enterprise::profile::puppetdb::listen_address: '0.0.0.0'
+puppet_enterprise::profile::amq::broker::heap_mb: '96'
+puppet_enterprise::profile::master::java_args:
+  Xmx: '192m'
+  Xms: '32m'
+  'XX:MaxPermSize': '=96m'
+  'XX:PermSize': '=96m'
+puppet_enterprise::profile::puppetdb::java_args:
+  Xmx: '96m'
+  Xms: '32m'
+puppet_enterprise::profile::console::java_args:
+  Xmx: '64m'
+  Xms: '32m'
+puppet_enterprise::profile::console::delayed_job_workers: 1
+puppet_enterprise::profile::database::shared_buffers: '4MB'
