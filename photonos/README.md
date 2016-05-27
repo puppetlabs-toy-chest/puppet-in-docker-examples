@@ -1,4 +1,4 @@
-# Puppet-in-Docker and PhotonOS
+# Puppet-in-Docker for PhotonOS
 
 [PhotonOS](https://vmware.github.io/photon/) is "a minimal Linux container
 host, optimized to run on VMware platforms." It's part of the VMware
@@ -14,7 +14,7 @@ provides a useful introduction.
 
 Puppet-in-Docker provides a simple way of running Puppet software on
 Photon. This simple example demonstrates running the standalone Puppet
-Server, as well as Puppet anf Facter, on Photon. It uses Vagrant, and
+Server, as well as Puppet and Facter, on Photon. It uses Vagrant, and
 the official `vmware/photon` Vagrant box for an easy local demo.
 
 ## Example
@@ -32,7 +32,7 @@ vagrant up
 
 This will first download the `vmware/photon` box. Once downloaded, a VM
 will be started, and once up and running the Docker daemon will be
-aenbled and started on the running VM. With that out of the way the
+enabled and started on the running VM. With that out of the way the
 provisioner will launch three Puppet-in-Docker containers:
 
 1. A persistent Puppet Server running on PhotonOS
@@ -46,3 +46,10 @@ like so:
 vagrant provision --provision-with facter
 vagrant provision --provision-with puppet
 ```
+
+This is intended as a proof-of-concept only. However this should be
+enaough to get an enthusiastic early-adopter started. It would be
+relatively simple to built on this with init scripts for the containers
+or to hook the agent instead into a Puppet Server or Puppet Enterprise
+installation running elsewhere. The exact list of mounted volumes may
+also vary depending on your particular usecase.
