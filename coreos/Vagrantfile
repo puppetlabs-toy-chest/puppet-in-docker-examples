@@ -1,0 +1,60 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+IMAGE_NAMESPACE = ENV['IMAGE_NAMESPACE'] || "puppet"
+
+Vagrant.configure(2) do |config|
+	config.ssh.insert_key = false
+  config.vm.box = "coreos-stable"
+  config.vm.box_url = "https://storage.googleapis.com/stable.release.core-os.net/amd64-usr/current/coreos_production_vagrant.json"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+    vb.check_guest_additions = false
+    vb.functional_vboxsf = false
+  end
+
+  config.vm.provider "vmware_fusion" do |v, override|
+    v.vmx["memsize"] = "1024"
+    override.vm.box_url = "https://storage.googleapis.com/stable.release.core-os.net/amd64-usr/current/coreos_production_vagrant_vmware_fusion.json"
+  end
+
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+    config.vbguest.auto_update = false
+  end
+
+  # This provisioner starts up a local Puppet Server instance
+  # from the Puppet-in-Docker container.
+	config.vm.provision "docker", images: [
+    "#{IMAGE_NAMESPACE}/puppet-agent-ubuntu",
+    "#{IMAGE_NAMESPACE}/facter",
+    "#{IMAGE_NAMESPACE}/puppetserver-standalone",
+  ] do |d|
+    d.run "puppet",
+      image: "#{IMAGE_NAMESPACE}/puppetserver-standalone",
+      args: "--hostname puppet"
+    sleep 100 # wait for puppetserver to boot
+  end
+
+  # Puppet-in-Docker also supports facter for querying state about the system
+  # In this case, by mounting directories from the host, we are able to access
+  # facts about the host operating system not the container.
+  #
+  # You can run Facter from the vagrant interface using the following command:
+  # vagrant provision --provision-with facter
+  config.vm.provision "facter", type: "shell", inline: <<-SHELL
+    docker run --rm --privileged -v /tmp:/tmp --net host -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 #{IMAGE_NAMESPACE}/facter
+  SHELL
+
+  # This provisioner runs Puppet from within a Puppet-in-Docker container
+  # but by mounting the directories from the host can affect the
+  # Photon host itself. We're linking this container to the above launched
+  # Puppet Server for the sake of this demo. In a cluster environment you would
+  # probably point at an external Puppet Server or Puppet Enterprise installation.
+  #
+  # You can rerun Puppet from the vagrant interface using the following command:
+  # vagrant provision --provision-with puppet
+  config.vm.provision "puppet", type: "shell", inline: <<-SHELL
+    docker run --rm --privileged --hostname agent -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 --link puppet:puppet #{IMAGE_NAMESPACE}/puppet-agent-ubuntu
+  SHELL
+end
