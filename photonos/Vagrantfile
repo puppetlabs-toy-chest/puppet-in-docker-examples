@@ -7,8 +7,15 @@ Vagrant.configure(2) do |config|
   config.vm.box = "vmware/photon"
   # config.vm.synced_folder "../data", "/vagrant_data"
 
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+    config.vbguest.auto_update = false
+  end
+
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
+    vb.check_guest_additions = false
+    vb.functional_vboxsf = false
+		vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
 
   config.vm.provider "vmware_fusion" do |v|
@@ -27,11 +34,12 @@ Vagrant.configure(2) do |config|
   config.vm.provision "docker", images: [
     "#{IMAGE_NAMESPACE}/puppet-agent-ubuntu",
     "#{IMAGE_NAMESPACE}/facter",
-    "#{IMAGE_NAMESPACE}/puppetserver",
+    "#{IMAGE_NAMESPACE}/puppetserver-standalone",
   ] do |d|
     d.run "puppet",
       image: "#{IMAGE_NAMESPACE}/puppetserver-standalone",
-      args: "--net host --hostname puppet"
+      args: "--hostname puppet"
+    sleep 70 # wait for puppetserver to boot
   end
 
   # Puppet-in-Docker also supports facter for querying state about the system
@@ -40,12 +48,9 @@ Vagrant.configure(2) do |config|
   #
   # You can run Facter from the vagrant interface using the following command:
   # vagrant provision --provision-with facter
-  config.vm.provision "facter", type: "docker" do |f|
-    f.run "facter",
-      image: "#{IMAGE_NAMESPACE}/facter",
-      args: "--rm --privileged -v /tmp:/tmp --net host -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64",
-      daemonize: false
-  end
+  config.vm.provision "facter", type: "shell", inline: <<-SHELL
+    docker run --rm --privileged -v /tmp:/tmp --net host -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 #{IMAGE_NAMESPACE}/facter
+  SHELL
 
   # This provisioner runs Puppet from within a Puppet-in-Docker container
   # but by mounting the directories from the host can affect the
@@ -55,10 +60,7 @@ Vagrant.configure(2) do |config|
   #
   # You can rerun Puppet from the vagrant interface using the following command:
   # vagrant provision --provision-with puppet
-  config.vm.provision "puppet", type: "docker" do |p|
-    p.run "agent",
-      image: "#{IMAGE_NAMESPACE}/puppet-agent-ubuntu",
-      args: "--rm --privileged -v /tmp:/tmp --net host -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 --link puppet:puppet",
-      daemonize: false
-  end
+  config.vm.provision "puppet", type: "shell", inline: <<-SHELL
+    docker run --rm --privileged --hostname agent -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 --link puppet:puppet #{IMAGE_NAMESPACE}/puppet-agent-ubuntu
+  SHELL
 end

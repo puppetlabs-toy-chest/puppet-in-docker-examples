@@ -13,21 +13,31 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
+    vb.check_guest_additions = false
+    vb.functional_vboxsf = false
   end
 
   config.vm.provider "vmware_fusion" do |v|
     v.vmx["memsize"] = "1024"
   end
 
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+    config.vbguest.auto_update = false
+  end
+
   # This provisioner starts up a local Puppet Server instance
   # from the Puppet-in-Docker container. Note that this file does
   # not use the docker provisioner as Docker on Atomic both requires sudo
   # and is found in a path not detected by the provisioner
+  #
+  # The sleep allows time for the puppet server to come up, meaning the later
+  # puppet provisioner should run successfully first time
   config.vm.provision "docker", type: "shell", inline: <<-SHELL
     sudo docker pull #{IMAGE_NAMESPACE}/puppet-agent-ubuntu
     sudo docker pull #{IMAGE_NAMESPACE}/facter
-    sudo docker pull #{IMAGE_NAMESPACE}/puppetserver
+    sudo docker pull #{IMAGE_NAMESPACE}/puppetserver-standalone
     sudo docker run -d --hostname puppet --name puppet #{IMAGE_NAMESPACE}/puppetserver-standalone
+    sleep 70
   SHELL
 
   # Puppet-in-Docker also supports facter for querying state about the system
@@ -49,6 +59,6 @@ Vagrant.configure(2) do |config|
   # You can rerun Puppet from the vagrant interface using the following command:
   # vagrant provision --provision-with puppet
   config.vm.provision "puppet", type: "shell", inline: <<-SHELL
-    sudo docker run --rm --privileged -v /tmp:/tmp  -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 --link puppet:puppet #{IMAGE_NAMESPACE}/puppet-agent-ubuntu
+    sudo docker run --rm --privileged --hostname agent -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 --link puppet:puppet #{IMAGE_NAMESPACE}/puppet-agent-ubuntu
   SHELL
 end
