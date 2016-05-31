@@ -12,6 +12,8 @@ So far we have the following demos:
 * [Atomic](atomic) - run Puppet on a CentOS Atomic host
 * [CoreOS](coreos) - run Puppet on CoreOS
 * [Docker compose](compose) - standup a Puppet Server stack using Compose
+* [Puppet at runtime](runtime) - use Puppet inside a new containerm
+  without it being part of the original image
 
 If you have suggestions for further examples, or if you've put something
 interesting together using Puppet-in-Docker, let us know by opening an
