@@ -52,7 +52,7 @@ any agents yet. Let's do that now.
 ## Running ephemeral agents
 
 You could connect any agents to the Puppet infrastructure launched above
-but for demonstration purposees we're just going to launch a few ephemeral
+but for demonstration purposes we're just going to launch a few ephemeral
 puppet agents in Docker containers. These aren't useful in most sense,
 the container will run, receive instructions from Puppet and then disappear.
 But they are useful for testing and demonstration purposes.
