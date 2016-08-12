@@ -5,7 +5,7 @@ IMAGE_NAMESPACE = ENV['IMAGE_NAMESPACE'] || "puppet"
 
 Vagrant.configure(2) do |config|
   config.vm.box = "vmware/photon"
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   if Vagrant.has_plugin?("vagrant-vbguest") then
     config.vbguest.auto_update = false
@@ -32,7 +32,7 @@ Vagrant.configure(2) do |config|
   # This provisioner starts up a local Puppet Server instance
   # from the Puppet-in-Docker container.
   config.vm.provision "docker", images: [
-    "#{IMAGE_NAMESPACE}/puppet-agent-ubuntu",
+    "#{IMAGE_NAMESPACE}/puppet-agent",
     "#{IMAGE_NAMESPACE}/facter",
     "#{IMAGE_NAMESPACE}/puppetserver-standalone",
   ] do |d|
@@ -61,6 +61,6 @@ Vagrant.configure(2) do |config|
   # You can rerun Puppet from the vagrant interface using the following command:
   # vagrant provision --provision-with puppet
   config.vm.provision "puppet", type: "shell", inline: <<-SHELL
-    docker run --rm --privileged --hostname agent -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 --link puppet:puppet #{IMAGE_NAMESPACE}/puppet-agent-ubuntu
+    docker run --rm --privileged --hostname agent -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /lib64:/lib64 --link puppet:puppet #{IMAGE_NAMESPACE}/puppet-agent
   SHELL
 end
