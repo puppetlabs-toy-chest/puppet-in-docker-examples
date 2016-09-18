@@ -14,7 +14,7 @@ the official stable channel Vagrant box for an easy local demo.
 ## Example
 
 The following assumes you have [Vagrant](https://vagrantup.com)
-installed. If you already have a PhotonOS instance then you can run the
+installed. If you already have a CoreOS instance then you can run the
 commands by hand if you prefer.
 
 Either checkout this repository and enter this directory, or simply
@@ -41,7 +41,7 @@ vagrant provision --provision-with puppet
 ```
 
 This is intended as a proof-of-concept only. However this should be
-enaough to get an enthusiastic early-adopter started. It would be
+enough to get an enthusiastic early-adopter started. It would be
 relatively simple to built on this with init scripts for the containers
 or to hook the agent instead into a Puppet Server or Puppet Enterprise
 installation running elsewhere. The exact list of mounted volumes may
