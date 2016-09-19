@@ -135,3 +135,22 @@ nicer formatting.
 PuppetDB stores a great deal of information, and PQL and the API provides a
 powerful way of accessing it. The Puppet-in-Docker setup makes for a great
 experimental test bed for building atop that capability.
+
+## Troubleshooting
+
+In case you see errors like the this on the puppet container:
+
+```
+ERROR [puppetserver] Puppet Failed to execute '/pdb/cmd/v1?checksum=eeb40197db6a4ac3d8bce09778388cf7a812a621&version=5&certname=puppetdb.local&command=replace_facts' on at least 1 of the following 'server_urls': https://puppetdb:8081
+ERROR [c.p.h.c.i.PersistentSyncHttpClient] Error executing http request
+ java.net.ConnectException: Connection refused
+```
+
+Try to uncomment the following lines in the definition of the puppet service in the `docker-compose.yaml` file:
+
+```
+environment:
+  - PUPPETDB_SERVER_URLS=https://puppetdb.local:8081
+links:
+  - puppetdb:puppetdb.local
+```

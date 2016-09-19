@@ -40,7 +40,7 @@ vagrant provision --provision-with puppet
 ```
 
 This is intended as a proof-of-concept only. However this should be
-enaough to get an enthusiastic early-adopter started. It would be
+enough to get an enthusiastic early-adopter started. It would be
 relatively simple to built on this with init scripts for the containers
 or to hook the agent instead into a Puppet Server or Puppet Enterprise
 installation running elsewhere. The exact list of mounted volumes may
