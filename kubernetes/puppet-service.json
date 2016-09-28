@@ -1,0 +1,27 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "puppet",
+    "creationTimestamp": null,
+    "labels": {
+      "service": "puppet"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "8140",
+        "protocol": "TCP",
+        "port": 8140,
+        "targetPort": 8140
+      }
+    ],
+    "selector": {
+      "service": "puppet"
+    }
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "kind": "Deployment",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "puppet",
+    "creationTimestamp": null
+  },
+  "spec": {
+    "replicas": 1,
+    "template": {
+      "metadata": {
+        "creationTimestamp": null,
+        "labels": {
+          "service": "puppet"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "puppet",
+            "image": "puppet/puppetserver-standalone",
+            "ports": [
+              {
+                "containerPort": 8140,
+                "protocol": "TCP"
+              }
+            ],
+            "env": [
+              {
+                "name": "GET_HOSTS_FROM",
+                "value": "dns"
+              }
+            ],
+            "resources": {}
+          }
+        ],
+        "restartPolicy": "Always"
+      }
+    },
+    "strategy": {}
+  },
+  "status": {}
+}

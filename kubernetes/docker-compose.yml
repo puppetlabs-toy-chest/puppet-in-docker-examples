@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  puppet:
+    image: puppet/puppetserver-standalone
+    ports:
+      - 8140
+    environment:
+      - GET_HOSTS_FROM=dns
