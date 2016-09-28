@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+  puppet:
+    hostname: puppet
+    image: puppet/puppetserver
+    ports:
+      - 8140
+
+  puppetdbpostgres:
+    image: puppet/puppetdb-postgres
+    hostname: postgres
+    environment:
+      - POSTGRES_PASSWORD=puppetdb
+      - POSTGRES_USER=puppetdb
+    ports:
+      - 5432
+
+  puppetdb:
+    hostname: puppetdb
+    image: puppet/puppetdb
+    ports:
+      - 8080
+      - 8081
+
+  puppetboard:
+    image: puppet/puppetboard
+    ports:
+      - 8000
+
+  puppetexplorer:
+    image: puppet/puppetexplorer
+    ports:
+      - 80
