@@ -81,6 +81,6 @@ Vagrant.configure(2) do |config|
   # into the container and then running it. The manifests in question install, configure
   # and run the nginx webserver on port 80
   config.vm.provision "nginx", type: "shell", env: docker_flags, inline: <<-SHELL
-    docker run $FLAGS -v /tmp/puppet:/var/puppet puppet/puppet-agent apply /var/puppet/init.pp --verbose
+    docker run $FLAGS -v /tmp/puppet:/var/puppet puppet/puppet-agent apply /var/puppet/manifests/init.pp --verbose
   SHELL
 end
