@@ -43,14 +43,14 @@ Vagrant.configure(2) do |config|
 
   # wait for puppetserver to boot
   config.vm.provision "shell", inline: <<-SHELL
-    sleep 70
+    sleep 120
   SHELL
 
   # These flags allow Puppet on the Docker container to manage the host OS
   # So information is read from the OS DBUS for services and from other file
   # locations for packages and files
   docker_flags = {
-    "FLAGS" => "--rm --privileged --hostname agent -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /var/run/dbus:/var/run/dbus -v /run/systemd:/run/systemd"
+    "FLAGS" => "--rm --privileged -v /tmp:/tmp -v /etc:/etc -v /var:/var -v /usr:/usr -v /var/run/dbus:/var/run/dbus -v /run/systemd:/run/systemd"
   }
 
   # Puppet-in-Docker also supports facter for querying state about the system
