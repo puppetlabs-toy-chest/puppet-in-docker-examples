@@ -20,7 +20,7 @@ services:
     #links:
     #  - puppetdb:puppetdb.local
 
-  puppetdbpostgres:
+  puppetdb-postgres:
     container_name: postgres
     image: puppet/puppetdb-postgres
     environment:
