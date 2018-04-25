@@ -63,14 +63,14 @@ connect our containers to in order for them to find the Puppet Server.
 Let's run up a few alpine agents. Run the following command a few times.
 
 ```
-docker run --net compose_default puppet/puppet-agent-alpine
+docker run --net puppetmaster_default puppet/puppet-agent-alpine
 ```
 
 And then run some Ubuntu based agents. Again run the command a couple
 of times to populate the database.
 
 ```
-docker run --net compose_default puppet/puppet-agent-ubuntu
+docker run --net puppetmaster_default puppet/puppet-agent-ubuntu
 ```
 
 Now access the dashboard described above again. You should have some data
