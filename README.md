@@ -22,7 +22,11 @@ issue or a pull request.
 
 # Maintainers
 
-This repository is maintained by: Gareth Rushgrove <gareth@puppet.com>.
+This repository is maintained by the Puppet, Inc. release engineering team <release@puppet.com>
 
 Individual examples may have separate maintainers as mentioned in the
-relevant README's.
+relevant READMEs.
+
+# Issues
+
+File issues and feature requests in the [Community Package Repository (CPR) project](https://tickets.puppet.com/browse/CPR) with the 'Container' component.
