@@ -1,3 +1,7 @@
+**!! This repository has been deprecated !!**
+
+If you're looking for running puppet with docker compose, head over to [pupperware](https://github.com/puppetlabs/pupperware)
+
 # Puppet-in-Docker examples
 
 [Puppet-in-Docker](https://github.com/puppetlabs/puppet-in-docker)
@@ -22,10 +26,7 @@ issue or a pull request.
 
 # Maintainers
 
-This repository is maintained by the Puppet, Inc. release engineering team <release@puppet.com>
-
-Individual examples may have separate maintainers as mentioned in the
-relevant READMEs.
+This repository is no longer actively maintained.
 
 # Issues
 
